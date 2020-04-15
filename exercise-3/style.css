@@ -1,0 +1,6 @@
+/* css for chat/messaging app mockup here */
+
+/* helper class used to control visibility of the Login/SignUp/Logout buttons */
+.isHidden {
+	display: none;
+}

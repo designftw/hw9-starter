@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>DFTW Chat Client</title>
+	<link rel="stylesheet" href="style.css" />
+	<script src="index.js" type="module"></script>
+</head>
+
+<body>
+	<!-- Login Form -->
+	<dialog id="loginDialog">
+		<form id="loginForm" method="dialog">
+			<p>
+				<label>Email:
+					<input autocomplete="email" type="text" name="email"
+						required />
+				</label>
+			</p>
+			<p>
+				<label>Password:
+					<input autocomplete="current-password" type="password"
+						name="password" required />
+				</label>
+			</p>
+			<p>
+				<button type="reset">Cancel</button>
+				<button>Login</button>
+			</p>
+			<p>
+				<span class="error" aria-live="polite"></span>
+			</p>
+		</form>
+	</dialog>
+	<!-- SignUp Form -->
+	<dialog id="signUpDialog">
+		<form id="signUpForm" method="dialog">
+			<p>
+				<label>Alias:
+					<input type="text" name="alias" required />
+				</label>
+			</p>
+			<p>
+				<label>Email:
+					<input autocomplete="email" type="email" name="email"
+						required />
+				</label>
+			</p>
+			<p>
+				<label>Password:
+					<input autocomplete="new-password" type="password"
+						name="password" required />
+				</label>
+			</p>
+			<p>
+				<button type="reset">Cancel</button>
+				<button>Sign Up</button>
+			</p>
+			<p>
+				<span class="error" aria-live="polite"></span>
+			</p>
+		</form>
+	</dialog>
+	<div>
+		<!-- buttons for logging in and logging out
+				 you can move these around as long as they retain the same id 
+				 and have a click event -->
+		<button id="loginButton">Login</button>
+		<button id="signUpButton">Sign Up</button>
+		<button id="logoutButton">Logout</button>
+	</div>
+</body>
+
+</html>
