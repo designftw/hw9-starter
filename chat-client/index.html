@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>DFTW Chat Client</title>
+	<link rel="stylesheet" href="style.css" />
+	<script src="src/index.js" type="module"></script>
+</head>
+
+<body>
+	<!-- Login Form -->
+	<dialog id="login_dialog">
+		<form id="login_form" method="dialog">
+			<p>
+				<label>Email or handle:
+					<input autocomplete="email" type="text" name="email" required />
+				</label>
+			</p>
+			<p>
+				<label>Password:
+					<input autocomplete="current-password" type="password" name="password" required />
+				</label>
+			</p>
+			<p>
+				<button>Login</button>
+				<button type="reset" class="close">Cancel</button>
+			</p>
+			<p>
+				<span class="error" aria-live="polite"></span>
+			</p>
+		</form>
+	</dialog>
+
+	<!-- SignUp Form -->
+	<dialog id="signup_dialog">
+		<form id="signup_form" method="dialog">
+			<p>
+				<label>Handle (username):
+					<input type="text" name="handle" required />
+				</label>
+			</p>
+			<p>
+				<label>Email:
+					<input autocomplete="email" type="email" name="email" required />
+				</label>
+			</p>
+			<p>
+				<label>Password:
+					<input autocomplete="new-password" type="password" name="password" required />
+				</label>
+			</p>
+			<p>
+				<button>Sign Up</button>
+				<button type="reset" class="close">Cancel</button>
+			</p>
+			<p>
+				<span class="error" aria-live="polite"></span>
+			</p>
+		</form>
+	</dialog>
+
+	<header>
+		<span class="if-logged-in">Welcome <span class="my-username"></span></span>
+		<button id="login_button" data-show-dialog="login_dialog" class="login">Login</button>
+		<button id="signup_button" data-show-dialog="signup_dialog" class="signup">Sign Up</button>
+		<button id="logout_button" class="logout">Logout</button>
+	</header>
+
+	<main class="if-logged-in">
+		<form id="chat_with_form">
+			<label>
+				Chat with:
+				<input type="text" name="handle" required>
+			</label>
+			<button>Set recipient</button>
+		</form>
+
+
+
+		<section class="if-has-recipient">
+			<h2>Messages</h2>
+
+			<form id="send_message_form">
+				<label>
+					Message:
+					<textarea name="message" required></textarea>
+				</label>
+				<button>Send</button>
+			</form>
+
+			<div id="messages_list">
+
+			</div>
+		</section>
+	</main>
+</body>
+
+</html>
