@@ -68,6 +68,9 @@ root.addEventListener("click", evt => {
 
 // try to signup when the user submits the signup form
 signup_form.addEventListener("submit", async evt => {
+	// we may want to keep the dialog open in case there's an error,
+	// but knowing that there's an error takes an async request,
+	// and by then it will be too late to prevent the default action
 	evt.preventDefault();
 
 	let data = getFormData(signup_form);
@@ -77,12 +80,14 @@ signup_form.addEventListener("submit", async evt => {
 
 	try {
 		await client.signup(data.handle, data.email, data.password);
+
+		// Since everything went well, close the dialog manually
+		// (form submission would have closed it, but we prevented the default action)
+		evt.target.closest("dialog").close();
 	}
 	catch (err) {
 		// if there is an error display the error in the form
 		errorContainer.innerHTML = err.message;
-
-		evt.preventDefault();
 	}
 });
 
