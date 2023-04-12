@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tracker</title>
+	<script src="index.js" type="module"></script>
+</head>
+<body>
+
+<header>
+	<button id="save_button">Save</button>
+</header>
+
+<template id="entry_template">
+	<article class="entry">
+		<form>
+			<label>Date: <input type="datetime-local" name="datetime"></label>
+			<label>Notes: <textarea name="notes"></textarea></label>
+		</form>
+	</article>
+</template>
+
+<main>
+	<button id="add_entry_button">Add entry</button>
+</main>
+
+<details>
+	<summary>Raw data</summary>
+	<pre id="data">
+		[
+			{
+				"datetime": "2023-04-10T10:00:00",
+				"notes": "Woke up happy."
+			},
+			{
+				"datetime": "2023-04-11T19:00:02",
+				"notes": "Stressed out."
+			}
+		]
+	</pre>
+</details>
+
+
+</body>
+</html>

@@ -1,7 +1,0 @@
-/* CSS for chat/messaging app mockup here */
-
-:root.logged-in :is(.login, .signup, .if-logged-out),
-:root:not(.logged-in) :is(.logout, .if-logged-in),
-:root:not(.has-recipient) .if-has-recipient {
-	display: none;
-}
