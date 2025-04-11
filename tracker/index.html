@@ -1,47 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tracker</title>
-	<script src="index.js" type="module"></script>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Personal Tracker</title>
+        <script type="importmap">
+            {
+                "imports": {
+                    "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.js",
+                    "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local@0.6.4/dist/browser/index.js",
+                    "@graffiti-garden/implementation-remote": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-remote@0.6.2/dist/browser/index.js",
+                    "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs"
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="app">
+            <header v-if="!$graffitiSession.value">
+                <button @click="$graffiti.login()">Log In</button>
+            </header>
+            <template v-else>
+                <header>
+                    <button @click="$graffiti.logout($graffitiSession.value)">
+                        Log Out
+                    </button>
+                </header>
 
-<header>
-	<button id="save_button">Save</button>
-</header>
+                <main>
+                    <article class="entry" v-for="entry in entries">
+                        <form @submit.prevent="saveEntry(entry)">
+                            <label
+                                >Date & Time:
+                                <input
+                                    type="datetime-local"
+                                    :value="new Date(entry.value.published).toISOString().slice(0, 16)"
+                                    @input="e=> entry.value.published = new Date(e.target.value).getTime()"
+                                />
+                            </label>
+                            <label
+                                >Notes:
+                                <textarea
+                                    name="notes"
+                                    v-model="entry.value.content"
+                                ></textarea>
+                            </label>
+                            <input type="submit" value="Save" />
+                            <button @click.prevent="deleteEntry(entry)">
+                                Delete
+                            </button>
+                        </form>
+                    </article>
 
-<template id="entry_template">
-	<article class="entry">
-		<form>
-			<label>Date & Time: <input type="datetime-local" name="datetime"></label>
-			<label>Notes: <textarea name="notes"></textarea></label>
-		</form>
-	</article>
-</template>
+                    <button @click="addEntry()">Add entry</button>
+                    <button @click="refreshEntries()">Refresh entries</button>
+                </main>
+            </template>
+        </div>
 
-<main>
-	<button id="add_entry_button">Add entry</button>
-</main>
-
-<details>
-	<summary>Raw data</summary>
-	<pre id="data">
-		[
-			{
-				"datetime": "2023-04-10T10:00:00",
-				"notes": "Woke up happy."
-			},
-			{
-				"datetime": "2023-04-11T19:00:02",
-				"notes": "Stressed out."
-			}
-		]
-	</pre>
-</details>
-
-
-</body>
+        <script src="index.js" type="module"></script>
+    </body>
 </html>

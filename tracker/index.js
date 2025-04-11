@@ -1,51 +1,70 @@
-let $$ = (selector, container = document) => Array.from(container.querySelectorAll(selector));
-let $ = (selector, container = document) => container.querySelector(selector);
+import { createApp } from "vue";
+import { GraffitiLocal } from "@graffiti-garden/implementation-local";
+import { GraffitiRemote } from "@graffiti-garden/implementation-remote";
+import { GraffitiPlugin } from "@graffiti-garden/wrapper-vue";
 
-// Load data
-let storedData = JSON.parse(data.innerHTML);
+createApp({
+  data() {
+    return {
+      entries: [],
+    };
+  },
 
-for (let entry of storedData) {
-	addEntry(entry);
-}
+  methods: {
+    async addEntry(content) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await this.$graffiti.put(
+        {
+          value: {
+            published: Date.now(),
+            content,
+            // Feel free to add more properties here
+            // based on your personal tracker's needs!
+          },
+          allowed: [],
+          channels: [this.$graffitiSession.value],
+        },
+        this.$graffitiSession.value,
+      );
+    },
 
-save_button.addEventListener("click", event => {
-	let dataToSave = $$(".entry > form").map(form => {
-		let data = new FormData(form);
-		return Object.fromEntries(data.entries());
-	});
+    async saveEntry(entry) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await this.$graffiti.put(entry, this.$graffitiSession.value);
+    },
 
-	data.innerHTML = JSON.stringify(dataToSave, null, "\t");
-});
+    async deleteEntry(entry) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await this.$graffiti.delete(entry, this.$graffitiSession.value);
+    },
 
-add_entry_button.addEventListener("click", event => {
-	// Set current date and time as default
-	let currentISODate = new Date().toISOString().substring(0, 19); // drop ms and timezone
-	addEntry({datetime: currentISODate});
-});
+    async refreshEntries() {
+      const entriesIterator = this.$graffiti.discover(
+        [this.$graffitiSession.value],
+        {
+          properties: {
+            value: {
+              content: { type: "string" },
+              published: { type: "number" },
+            },
+          },
+        },
+        this.$graffitiSession.value,
+      );
 
-function addEntry(data) {
-	let entry = entry_template.content.cloneNode(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-	for (let prop in data) {
-		setFormElement(prop, data[prop], entry);
-	}
+      this.entries = [];
+      for await (const { object } of entriesIterator) {
+        this.entries.push(object);
+      }
 
-	// Add new entry after "Add entry" button
-	add_entry_button.after(entry);
-}
-
-function setFormElement(name, value, container) {
-	let elements = $$(`[name="${name}"]`, container);
-
-	for (let element of elements) { // only radios will have more than one, but can't hurt
-		if (element.type === "checkbox") {
-			element.checked = value;
-		}
-		if (element.type === "radio") {
-			element.checked = element.value === value;
-		}
-		else {
-			element.value = value;
-		}
-	}
-}
+      // Do any processing here like sorting...
+    },
+  },
+})
+  .use(GraffitiPlugin, {
+    graffiti: new GraffitiLocal(),
+    // graffiti: new GraffitiRemote(),
+  })
+  .mount("#app");
