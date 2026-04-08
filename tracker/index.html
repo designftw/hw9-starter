@@ -7,16 +7,18 @@
         <script type="importmap">
             {
                 "imports": {
-                    "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.js",
-                    "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local@0.6.4/dist/browser/index.js",
-                    "@graffiti-garden/implementation-remote": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-remote@0.6.2/dist/browser/index.js",
-                    "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7.2/dist/browser/plugin.mjs"
+                    "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.32/dist/vue.esm-browser.js",
+                    "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local@1.2.0/dist/browser/index.js",
+                    "@graffiti-garden/implementation-decentralized": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-decentralized@0.0.9/dist/browser/index.js",
+                    "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@1.2.2/dist/browser/plugin.mjs"
                 }
             }
         </script>
+        <script src="index.js" type="module"></script>
     </head>
     <body>
-        <div id="app">
+        <div id="app">Loading...</div>
+        <template id="template">
             <header v-if="!$graffitiSession.value">
                 <button @click="$graffiti.login()">Log In</button>
             </header>
@@ -28,18 +30,19 @@
                 </header>
 
                 <main>
-                    <article class="entry" v-for="entry in entries">
+                    <p v-if="areUpdatesLoading">Loading...</p>
+                    <article v-else v-for="entry in entries" :key="entry.value.id">
                         <form @submit.prevent="saveEntry(entry)">
-                            <label
-                                >Date & Time:
+                            <label>
+                                Date & Time:
                                 <input
                                     type="datetime-local"
                                     :value="new Date(entry.value.published).toISOString().slice(0, 16)"
                                     @input="e=> entry.value.published = new Date(e.target.value).getTime()"
                                 />
                             </label>
-                            <label
-                                >Notes:
+                            <label>
+                                Notes:
                                 <textarea
                                     name="notes"
                                     v-model="entry.value.content"
@@ -52,12 +55,9 @@
                         </form>
                     </article>
 
-                    <button @click="addEntry()">Add entry</button>
-                    <button @click="refreshEntries()">Refresh entries</button>
+                    <button @click="addEntry('')">Add entry</button>
                 </main>
             </template>
-        </div>
-
-        <script src="index.js" type="module"></script>
+        </>
     </body>
 </html>
